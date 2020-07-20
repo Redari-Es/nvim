@@ -254,9 +254,9 @@ cnoremap <M-w> <S-Right>
 " ===#YES!
 " Use <space> + new arrow keys for moving the cursor around windows
 noremap <LEADER>w <C-w>w
-noremap <LEADER>n <C-w>k
+noremap <LEADER>u <C-w>k
 noremap <LEADER>e <C-w>j
-noremap <LEADER>u <C-w>h
+noremap <LEADER>n <C-w>h
 noremap <LEADER>i <C-w>l
 
 " Disable the default s key
@@ -286,10 +286,9 @@ noremap sv <C-w>t<C-w>H
 " ===
 " === Rotate screens
 " ===#YES!
-noremap srh <C-w>b<C-w>K    "#m->h
-noremap srv <C-w>b<C-w>H    "#n->v
-
-" Press <SPACE> + q to close the window below the current window
+noremap srh <C-w>b<C-w>K    
+noremap srv <C-w>b<C-w>H    
+"Press <SPACE> + q to close the window below the current window
 noremap <LEADER>q <C-w>j:q<CR>
 
 
@@ -432,7 +431,6 @@ Plug 'arzg/vim-colors-xcode'
 " Genreal Highlighter
 Plug 'jaxbot/semantic-highlight.vim'
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
-
 " File navigation
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
