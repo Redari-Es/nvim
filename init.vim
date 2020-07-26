@@ -63,6 +63,7 @@ set autochdir
 " === Editor behavior
 " ===
 set number
+"set nrformats=
 set relativenumber
 set cursorline
 set noexpandtab
@@ -152,7 +153,7 @@ noremap S :w<CR>
 noremap <LEADER>rc :e ~/.config/nvim/init.vim<CR>
 
 " Open Startify
-"noremap <LEADER>st :Startify<CR>
+noremap <LEADER>st :Startify<CR>
 
 " Undo operations
 noremap l u       
@@ -166,7 +167,7 @@ noremap K I
 nnoremap Y y$
 
 " Copy to system clipboard
-vnoremap Y "+y
+vnoremap y "+y
 
 " Indentation
 nnoremap < <<
@@ -868,7 +869,7 @@ let g:far#mapping = {
 " ===
 " === vim-calc
 " ===
-"noremap <LEADER>a :call Calc()<CR>
+noremap <LEADER>a :call Calc()<CR>
 " Testing
 "if !empty(glob('~/Github/vim-calc/vim-calc.vim'))
 "source ~/Github/vim-calc/vim-calc.vim
@@ -944,8 +945,8 @@ let maplocalleader=' '
 " ===
 " === vim-calendar
 " ===#YES!        i->k  I->K
-"noremap \c :Calendar -position=here<CR>
-noremap \\ :Calendar -view=clock -position=here<CR>
+"noremap /c :Calendar -position=here<CR>
+noremap // :Calendar -view=clock -position=here<CR>
 let g:calendar_google_calendar = 1
 let g:calendar_google_task = 1
 augroup calendar-mappings
