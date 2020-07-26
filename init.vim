@@ -945,8 +945,8 @@ let maplocalleader=' '
 " ===
 " === vim-calendar
 " ===#YES!        i->k  I->K
-"noremap /c :Calendar -position=here<CR>
-noremap // :Calendar -view=clock -position=here<CR>
+"noremap \c :Calendar -position=here<CR>
+noremap \\ :Calendar -view=clock -position=here<CR>
 let g:calendar_google_calendar = 1
 let g:calendar_google_task = 1
 augroup calendar-mappings
