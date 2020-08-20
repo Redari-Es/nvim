@@ -1,18 +1,3 @@
-
-"     ^                      ^
-"     u                     k=u
-" < n   i >          < h=n      l=i >
-"     e                     j=e
-"     v                      v    
-
-
-
-
-"ctrl+x= ctrl+s
-" change
-    " :%TOhtml  自动将文件做成html的格式  google-chrome-stable可以浏览
-    " ctrl+a    数字加1这方便于用宏 ctrl+s or ctrl+x减大概是把
-
 " __  __   __  _   ___     _____ __  __ ____   ____
 "|  \/  \ \ / / | \ | \ \   / /_ _|  \/  |  _ \ / ___|
 "| |\/| |\ V /  |  \| |\ \ / / | || |\/| | |_) | |
@@ -25,6 +10,11 @@
 " vim-esearch
 " fmoralesc/worldslice
 " SidOfc/mkdx
+
+"ctrl+x= ctrl+s
+" change
+" :%TOhtml  自动将文件做成html的格式  google-chrome-stable可以浏览
+" ctrl+a    数字加1这方便于用宏 ctrl+s or ctrl+x减大概是把
 
 
 " ===
@@ -57,11 +47,33 @@ source $HOME/.config/nvim/_machine_specific.vim
 "set clipboard=unnamedplus
 let &t_ut=''
 set autochdir
+"
+set nocompatible
 
 
 " ===
+" === my add some set
+" ===
+"
+"file
+filetype on
+filetype plugin on 
+filetype indent on
+"
+syntax enable
+set incsearch
+set ruler
+set matchtime=1
+set autoread
+set enc=utf-8 "coding
+
+
+"===
 " === Editor behavior
 " ===
+"set shell=bash\ -i
+"
+"
 set number
 set relativenumber
 set cursorline
@@ -152,13 +164,13 @@ noremap S :w<CR>
 noremap <LEADER>rc :e ~/.config/nvim/init.vim<CR>
 
 " Open Startify
-"noremap <LEADER>st :Startify<CR>
+noremap <LEADER>st :Startify<CR>
 
 " Undo operations
-noremap l u       
+noremap l u
 "#这里把l->u
 "===上面已改
-"#" Insert Key这里映射了k键为i    
+"#" Insert Key这里映射了k键为i
 noremap k i
 noremap K I
 
@@ -186,7 +198,7 @@ vnoremap <LEADER>tt :s/    /\t/g
 noremap <silent> <LEADER>o za
 
 " Open up lazygit
-noremap \g :Git 
+noremap \g :Git
 noremap <c-g> :tabe<CR>:-tabmove<CR>:term lazygit<CR>
 
 
@@ -199,12 +211,12 @@ noremap <c-g> :tabe<CR>:-tabmove<CR>:term lazygit<CR>
 " < n   i >
 "     e
 "     v             这里不用
- noremap <silent> u k
+noremap <silent> u k
 noremap <silent> n h
 noremap <silent> e j
 noremap <silent> i l
-noremap <silent> gu gk           
-noremap <silent> ge gj        
+noremap <silent> gu gk
+noremap <silent> ge gj
 
 
 " U/E K/J keys for 5 times u/e (faster navigation)
@@ -222,7 +234,7 @@ noremap W 5w
 noremap B 5b
 
 " set h (same as n, cursor left) to 'end of word'
-noremap h e   
+noremap h e
 "#这里不用 原本是e
 "===#YES!
 " Ctrl + U/K or E/J will move up/down the view port without moving the cursor
@@ -248,6 +260,11 @@ cnoremap <C-f> <Right>
 cnoremap <M-b> <S-Left>
 cnoremap <M-w> <S-Right>
 
+" ===
+" === Searching
+" ===
+noremap - N
+noremap = n
 
 " ===
 " === Window management
@@ -277,7 +294,7 @@ noremap <left> :vertical resize-5<CR>
 noremap <right> :vertical resize+5<CR>
 
 " ===
-" === Place the two screens up and down     #m->h    
+" === Place the two screens up and down     #m->h
 " ===#YES!
 noremap sh <C-w>t<C-w>K
 " Place the two screens side by side    #n->v
@@ -286,8 +303,8 @@ noremap sv <C-w>t<C-w>H
 " ===
 " === Rotate screens
 " ===#YES!
-noremap srh <C-w>b<C-w>K    
-noremap srv <C-w>b<C-w>H    
+noremap srh <C-w>b<C-w>K
+noremap srv <C-w>b<C-w>H
 "Press <SPACE> + q to close the window below the current window
 noremap <LEADER>q <C-w>j:q<CR>
 
@@ -310,6 +327,7 @@ noremap tmi :+tabmove<CR>
 " ===#NO!
 " Snippets
 source $HOME/.config/nvim/md-snippets.vim
+"source $XDG_CONFIG_HOME/nvim/md-snippets.vim
 " auto spell
 autocmd BufRead,BufNewFile *.md setlocal spell
 
@@ -343,14 +361,21 @@ autocmd BufEnter * silent! lcd %:p:h
 " Call figlet
 noremap tx :r !figlet
 
-noremap <LEADER>- :lN<CR>
-noremap <LEADER>= :lne<CR>
+"noremap <LEADER>- :lN<CR>
+"noremap <LEADER>= :lne<CR>
 
 " find and replace
 noremap \s :%s//g<left><left>
 
 " set wrap
 noremap <LEADER>sw :set wrap<CR>
+
+" press f10 to show hlgroup
+map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+
 
 " Compile function
 noremap r :call CompileRunGcc()<CR>
@@ -377,13 +402,15 @@ func! CompileRunGcc()
 	elseif &filetype == 'html'
 		silent! exec "!".g:mkdp_browser." % &"
 	elseif &filetype == 'markdown'
-		exec "MarkdownPreview"
+		exec "InstantMarkdownPreview"
+		"exec "MarkdownPreview"
 	elseif &filetype == 'tex'
 		silent! exec "VimtexStop"
 		silent! exec "VimtexCompile"
 	elseif &filetype == 'dart'
-		CocCommand flutter.run -d iPhone\ 11\ Pro
-		CocCommand flutter.dev.openDevLog
+		exec "CocCommand flutter.run -d ".g:flutter_default_device
+		"CocCommand flutter.run -d iPhone\ 11\ Pro
+		silent! exec "CocCommand flutter.dev.openDevLog"
 	elseif &filetype == 'javascript'
 		set splitbelow
 		:sp
@@ -404,42 +431,56 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'junegunn/vim-easy-align'
 
 Plug 'tiagofumo/dart-vim-flutter-layout'
-Plug 'RRethy/vim-illuminate'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'KabbAmine/vCoolor.vim'
-Plug 'pechorin/any-jump.vim'
-Plug 'airblade/vim-rooter'
-Plug 'skywind3000/asynctasks.vim'
-Plug 'skywind3000/asyncrun.vim'
 Plug 'junkblocker/git-time-lapse'
 
 " Testing my own plugin
 Plug 'theniceboy/vim-calc'
+"Status line
+Plug 'theniceboy/eleline.vim'
 
 " Pretty Dress
-Plug 'theniceboy/eleline.vim'
+Plug 'theniceboy/vim-deus'
 Plug 'bling/vim-bufferline'
+Plug 'bpietravalle/vim-bolt'
 "Plug 'liuchengxu/space-vim-theme'
 "Plug 'morhetz/gruvbox'
 "Plug 'ayu-theme/ayu-vim'
 "Plug 'rakr/vim-one'
 "Plug 'mhartington/oceanic-next'
 "Plug 'kristijanhusak/vim-hybrid-material'
-Plug 'ajmwagar/vim-deus'
-Plug 'arzg/vim-colors-xcode'
+"Plug 'ajmwagar/vim-deus'
+"Plug 'arzg/vim-colors-xcode'
 
 " Genreal Highlighter
-Plug 'jaxbot/semantic-highlight.vim'
-Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
-" File navigation
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'junegunn/fzf.vim'
-Plug 'yuki-ycino/fzf-preview.vim'
-Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
-Plug 'junegunn/fzf'
-Plug 'kevinhwang91/rnvimr', {'do': 'make sync'}
+" 1
+"Plug 'jaxbot/semantic-highlight.vim'
+"Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+"2
+Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
+Plug 'RRethy/vim-illuminate'
 
+
+" File navigation
+"1
+"Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+"Plug 'Xuyuanp/nerdtree-git-plugin'
+"Plug 'junegunn/fzf.vim'
+"Plug 'yuki-ycino/fzf-preview.vim'
+"Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
+"Plug 'junegunn/fzf'
+"Plug 'kevinhwang91/rnvimr', {'do': 'make sync'}
+"2
+Plug 'junegunn/fzf.vim'
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+Plug 'kevinhwang91/rnvimr'
+Plug 'airblade/vim-rooter'
+Plug 'Redari-Es/any-jump.vim'
+"Plug 'pechorin/any-jump.vim'
+"
+"
+"
 " Taglist
 Plug 'liuchengxu/vista.vim'
 
@@ -468,9 +509,14 @@ Plug 'theniceboy/vim-gitignore', { 'for': ['gitignore', 'vim-plug'] }
 Plug 'fszymanski/fzf-gitignore', { 'do': ':UpdateRemotePlugins' }
 "Plug 'mhinz/vim-signify'
 Plug 'airblade/vim-gitgutter'
+Plug 'cohama/agit.vim'
+
+"
+" AutoFormat
+Plug 'Chiel92/vim-autoformat'
 
 " Tex
-Plug 'lervag/vimtex'
+"Plug 'lervag/vimtex'
 
 " CSharp
 Plug 'OmniSharp/omnisharp-vim'
@@ -483,7 +529,7 @@ Plug 'alvan/vim-closetag'
 " Plug 'hail2u/vim-css3-syntax' " , { 'for': ['vim-plug', 'php', 'html', 'javascript', 'css', 'less'] }
 " Plug 'spf13/PIV', { 'for' :['php', 'vim-plug'] }
 " Plug 'pangloss/vim-javascript', { 'for': ['vim-plug', 'php', 'html', 'javascript', 'css', 'less'] }
-" Plug 'yuezk/vim-js', { 'for': ['vim-plug', 'php', 'html', 'javascript', 'css', 'less'] }
+Plug 'yuezk/vim-js', { 'for': ['vim-plug', 'php', 'html', 'javascript', 'css', 'less'] }
 " Plug 'MaxMEllon/vim-jsx-pretty', { 'for': ['vim-plug', 'php', 'html', 'javascript', 'css', 'less'] }
 " Plug 'jelera/vim-javascript-syntax', { 'for': ['vim-plug', 'php', 'html', 'javascript', 'css', 'less'] }
 "Plug 'jaxbot/browserlink.vim'
@@ -492,28 +538,32 @@ Plug 'alvan/vim-closetag'
 Plug 'fatih/vim-go' , { 'for': ['go', 'vim-plug'], 'tag': '*' }
 
 " Python
-Plug 'tmhedberg/SimpylFold', { 'for' :['python', 'vim-plug'] }
+"Plug 'tmhedberg/SimpylFold', { 'for' :['python', 'vim-plug'] }
 Plug 'Vimjas/vim-python-pep8-indent', { 'for' :['python', 'vim-plug'] }
 Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for' :['python', 'vim-plug'] }
 "Plug 'vim-scripts/indentpython.vim', { 'for' :['python', 'vim-plug'] }
 "Plug 'plytophogy/vim-virtualenv', { 'for' :['python', 'vim-plug'] }
-Plug 'tweekmonster/braceless.vim'
+Plug 'tweekmonster/braceless.vim', {'for' :['python', 'vim-plug']}
 
 " Flutter
 Plug 'theniceboy/dart-vim-plugin'
-Plug 'thosakwe/vim-flutter'
+"Plug 'thosakwe/vim-flutter'
 
 " Swift
 Plug 'keith/swift.vim'
 
 " Markdown
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
-Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
-Plug 'mzlogin/vim-markdown-toc', { 'for': ['gitignore', 'markdown'] }
+"Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
+"Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'}
+Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
+Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle', 'for':['text', 'markdown', 'vim-plug'] }
+Plug 'mzlogin/vim-markdown-toc', { 'for': ['gitignore', 'markdown', 'vim-plug'] }
 Plug 'dkarter/bullets.vim'
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
 
 " Other filetypes
-Plug 'jceb/vim-orgmode', {'for': ['vim-plug', 'org']}
+"Plug 'jceb/vim-orgmode', {'for': ['vim-plug', 'org']}
 
 " Editor Enhancement
 "Plug 'Raimondi/delimitMate'
@@ -525,20 +575,21 @@ Plug 'tpope/vim-surround' " type yskw' to wrap the word with '' or type cs'` to 
 Plug 'gcmt/wildfire.vim' " in Visual mode, type k' to select all text in '', or type k) k] k} kp
 Plug 'junegunn/vim-after-object' " da= to delete what's after =
 Plug 'godlygeek/tabular' " :Tabularize <regex> to align
-Plug 'tpope/vim-capslock'	" Ctrl+L (insert) to toggle capslock
+"Plug 'tpope/vim-capslock'	" Ctrl+L (insert) to toggle capslock
 Plug 'easymotion/vim-easymotion'
-Plug 'Konfekt/FastFold'
+"Plug 'Konfekt/FastFold'
 "Plug 'junegunn/vim-peekaboo'
 "Plug 'wellle/context.vim'
 Plug 'svermeulen/vim-subversive'
 Plug 'theniceboy/argtextobj.vim'
 Plug 'rhysd/clever-f.vim'
+Plug 'chrisbra/NrrwRgn'
+Plug 'AndrewRadev/splitjoin.vim'
+
 
 " Input Method Autoswitch
 "Plug 'rlue/vim-barbaric' " slowing down vim-multiple-cursors
 
-" Formatter
-Plug 'Chiel92/vim-autoformat'
 
 " For general writing
 Plug 'junegunn/goyo.vim'
@@ -558,8 +609,10 @@ Plug 'osyo-manga/vim-anzu'
 
 " Mini Vim-APP
 "Plug 'liuchengxu/vim-clap'
-"Plug 'jceb/vim-orgmode'
-"Plug 'mhinz/vim-startify'
+Plug 'jceb/vim-orgmode'
+Plug 'mhinz/vim-startify'
+Plug 'skywind3000/asynctasks.vim'
+Plug 'skywind3000/asyncrun.vim'
 
 " Vim Applications
 Plug 'itchyny/calendar.vim'
@@ -577,11 +630,12 @@ Plug 'makerj/vim-pdf'
 "Plug 'xolox/vim-misc' " vim-session dep
 
 " Dependencies
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'kana/vim-textobj-user'
-Plug 'roxma/nvim-yarp'
+"Plug 'MarcWeber/vim-addon-mw-utils'
+"Plug 'kana/vim-textobj-user'
+"Plug 'roxma/nvim-yarp'
 
 call plug#end()
+set re=0
 
 " experimental
 set lazyredraw
@@ -610,7 +664,7 @@ color deus
 "set cursorcolumn
 
 hi NonText ctermfg=gray guifg=grey10
-"hi SpecialKey ctermfg=blue guifg=grey70
+hi SpecialKey ctermfg=blue guifg=grey70
 
 " ===================== Start of Plugin Settings =====================
 
@@ -624,11 +678,17 @@ let g:airline_powerline_fonts = 0
 " ==
 " == GitGutter
 " ==#NO!
-let g:gitgutter_signs = 0
+"let g:gitgutter_signs = 0
+let g:gitgutter_sign_allow_clobber = 0
 let g:gitgutter_map_keys = 0
 let g:gitgutter_override_sign_column_highlight = 0
 let g:gitgutter_preview_win_floating = 1
-autocmd BufWritePost * GitGutter
+let g:gitgutter_sign_added = '▎'
+let g:gitgutter_sign_modified = '░'
+let g:gitgutter_sign_removed = '▏'
+let g:gitgutter_sign_removed_first_line ='▔'
+let g:gitgutter_sign_modified_removed = '▒'
+"autocmd BufWritePost * GitGutte
 nnoremap <LEADER>gf :GitGutterFold<CR>
 nnoremap H :GitGutterPreviewHunk<CR>
 nnoremap <LEADER>g- :GitGutterPrevHunk<CR>
@@ -646,7 +706,32 @@ nnoremap gb :Gblame<CR>
 " ===#NO!
 " fix the most annoying bug that coc has
 "silent! au BufEnter,BufRead,BufNewFile * silent! unmap if
-let g:coc_global_extensions = ['coc-python', 'coc-vimlsp', 'coc-html', 'coc-json', 'coc-css', 'coc-tsserver', 'coc-yank', 'coc-gitignore', 'coc-vimlsp', 'coc-tailwindcss', 'coc-stylelint', 'coc-tslint', 'coc-lists', 'coc-git', 'coc-explorer', 'coc-pyright', 'coc-sourcekit', 'coc-translator', 'coc-flutter', 'coc-todolist', 'coc-yaml', 'coc-tasks', 'coc-actions', 'coc-diagnostic', "coc-prettier"]
+let g:coc_global_extensions = [
+  \ 'coc-actions',
+  \ 'coc-css',
+  \ 'coc-diagnostic',
+  \ 'coc-explorer',
+  \ 'coc-flutter-tools',
+  \ 'coc-gitignore',
+  \ 'coc-html',
+  \ 'coc-json',
+  \ 'coc-lists',
+  \ 'coc-prettier',
+  \ 'coc-pyright',
+  \ 'coc-python',
+  \ 'coc-snippets',
+  \ 'coc-sourcekit',
+  \ 'coc-stylelint',
+  \ 'coc-syntax',
+  \ 'coc-tasks',
+  \ 'coc-todolist',
+  \ 'coc-translator',
+  \ 'coc-tslint-plugin',
+  \ 'coc-tsserver',
+  \ 'coc-vimlsp',
+  \ 'coc-vimlsp',
+  \ 'coc-yaml',
+  \ 'coc-yank']
 "set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 "nmap <silent> <TAB> <Plug>(coc-range-select)
 "xmap <silent> <TAB> <Plug>(coc-range-select)
@@ -667,6 +752,17 @@ function! s:check_back_space() abort
 endfunction
 inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <silent><expr> <c-o> coc#refresh()
+function! Show_documentation()
+	call CocActionAsync('highlight')
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+nnoremap <LEADER>h :call Show_documentation()<CR>
+" autocmd CursorHold * silent call CocActionAsync('highlight')
+
 
 " Open up coc-commands
 nnoremap <c-c> :CocCommand<CR>
@@ -679,7 +775,7 @@ omap af <Plug>(coc-funcobj-a)
 nnoremap <silent> <space>y :<C-u>CocList -A --normal yank<cr>
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <leader>rn <Plug>(coc-rename)
 nmap tt :CocCommand explorer<CR>
@@ -696,69 +792,98 @@ nnoremap <leader>tn :CocCommand todolist.create<CR>
 nnoremap <leader>tl :CocList todolist<CR>
 nnoremap <leader>tu :CocCommand todolist.download<CR>:CocCommand todolist.upload<CR>
 " coc-tasks
-noremap <silent> T :CocList tasks<CR>
+noremap <silent> <leader>ts :CocList tasks<CR>
+" coc-snippets
+imap <C-l> <Plug>(coc-snippets-expand)
+vmap <C-e> <Plug>(coc-snippets-select)
+let g:coc_snippet_next = '<c-e>'
+let g:coc_snippet_prev = '<c-n>'
+imap <C-e> <Plug>(coc-snippets-expand-jump)
+let g:snips_author = 'Redari-Es'
+
+nmap <silent> <LEADER>- <Plug>(coc-diagnostic-prev)
+nmap <silent> <LEADER>= <Plug>(coc-diagnostic-next)
 
 
-" ===
+
+
 " === MarkdownPreview
 " ===#NO!
-let g:mkdp_auto_start = 0
-let g:mkdp_auto_close = 1
-let g:mkdp_refresh_slow = 0
-let g:mkdp_command_for_global = 0
-let g:mkdp_open_to_the_world = 0
-let g:mkdp_open_ip = ''
-let g:mkdp_echo_preview_url = 0
-let g:mkdp_browserfunc = ''
-let g:mkdp_preview_options = {
-			\ 'mkit': {},
-			\ 'katex': {},
-			\ 'uml': {},
-			\ 'maid': {},
-			\ 'disable_sync_scroll': 0,
-			\ 'sync_scroll_type': 'middle',
-			\ 'hide_yaml_meta': 1
-			\ }
-let g:mkdp_markdown_css = ''
-let g:mkdp_highlight_css = ''
-let g:mkdp_port = ''
-let g:mkdp_page_title = '「${name}」'
+"let g:mkdp_auto_start = 1
+"let g:mkdp_auto_close = 1
+"let g:mkdp_refresh_slow = 1
+"let g:mkdp_command_for_global = 0
+"let g:mkdp_open_to_the_world = 0
+"let g:mkdp_open_ip = ''
+"let g:mkdp_browser = ''
+"let g:mkdp_echo_preview_url = 0
+"let g:mkdp_browserfunc = ''
+"let g:mkdp_preview_options = {
+"\ 'mkit': {},
+"\ 'katex': {},
+"\ 'uml': {},
+"\ 'maid': {},
+"\ 'disable_sync_scroll': 0,
+"\ 'sync_scroll_type': 'middle',
+"\ 'hide_yaml_meta': 1
+"\ }
+"let g:mkdp_markdown_css = ''
+"let g:mkdp_highlight_css = ''
+"let g:mkdp_port = ''
+"let g:mkdp_page_title = '「${name}」'
+
+" ===
+" === vim-instant-markdown
+" === 实时浏览md文件
+let g:instant_markdown_slow = 0
+let g:instant_markdown_autostart = 1
+"let g:instant_markdown_open_to_the_world = 1
+"let g:instant_markdown_allow_unsafe_content = 1
+"let g:instant_markdown_allow_external_content = 0 
+let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
+let g:instant_markdown_mathjax = 1
+let g:instant_markdown_autoscroll = 1
+let g:instant_markdown_browser = "chromium"
+let g:instant_markdown_port = 8888
 
 
 " ===
 " === vim-table-mode
-" ===#NO!
+" === 自动矫正md表格格式
 noremap <LEADER>tm :TableModeToggle<CR>
+"noremap <LEADER>mp :MarkdownPreview<CR>
+
 "let g:table_mode_disable_mappings = 1
 let g:table_mode_cell_text_object_i_map = 'k<Bar>'
 
 
 " ===
 " === FZF
-" ===#YES!
+" === 文件查找
 set rtp+=/usr/local/opt/fzf
 set rtp+=/home/linuxbrew/.linuxbrew/opt/fzf
-set rtp+=/home/david/.linuxbrew/opt/fzf
-noremap <C-p> :Files<CR>
-noremap <C-u> :Rg<CR>  
-noremap <C-h> :History<CR>
+set rtp+=/home/redaries/.linuxbrew/opt/fzf
+" noremap <silent> <C-p> :Files<CR>
+"noremap <silent> <C-p> :Leaderf file<CR>
+noremap <silent> <C-f> :Rg<CR>
+noremap <silent> <C-h> :History<CR>
 "noremap <C-t> :BTags<CR>
-noremap <C-l> :Lines<CR>
-noremap <C-w> :Buffers<CR>
+noremap <silent> <C-l> :Lines<CR>
+noremap <silent> <C-w> :Buffers<CR>
 noremap <leader>; :History:<CR>
 
 let g:fzf_preview_window = 'right:60%'
 let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
 
 function! s:list_buffers()
-  redir => list
-  silent ls
-  redir END
-  return split(list, "\n")
+	redir => list
+	silent ls
+	redir END
+	return split(list, "\n")
 endfunction
 
 function! s:delete_buffers(lines)
-  execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
+	execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
 endfunction
 
 command! BD call fzf#run(fzf#wrap({
@@ -769,8 +894,22 @@ command! BD call fzf#run(fzf#wrap({
 
 noremap <c-d> :BD<CR>
 
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.7 } }
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 
+" ===
+" === Leaderf
+" ===
+" let g:Lf_WindowPosition = 'popup'
+let g:Lf_PreviewInPopup = 1
+let g:Lf_PreviewCode = 1
+let g:Lf_ShowHidden = 1
+let g:Lf_ShowDevIcons = 1
+let g:Lf_CommandMap = {
+\   '<C-k>': ['<C-u>'],
+\   '<C-j>': ['<C-e>'],
+\   '<C-]>': ['<C-v>'],
+\   '<C-p>': ['<C-n>'],
+\}
 
 
 " ===
@@ -782,7 +921,7 @@ let g:ctrlp_cmd = 'CtrlP'
 
 " ===
 " === vim-bookmarks
-" ===#NO!
+" === 书签
 let g:bookmark_no_default_key_mappings = 1
 nmap mt <Plug>BookmarkToggle
 nmap ma <Plug>BookmarkAnnotate
@@ -806,7 +945,7 @@ let g:bookmark_location_list = 1
 
 " ===
 " === Undotree
-" ===#NO!
+" === 文件树
 noremap L :UndotreeToggle<CR>
 let g:undotree_DiffAutoOpen = 1
 let g:undotree_SetFocusWhenToggle = 1
@@ -839,21 +978,22 @@ endfunc
 " ===
 " === vim-visual-multi
 " ===
-"let g:VM_theme             = 'iceblue'
+let g:VM_theme             = 'iceblue'
 "let g:VM_default_mappings = 0
-let g:VM_leader = {'default': ',', 'visual': ',', 'buffer': ','}
-let g:VM_maps = {}
-let g:VM_custom_motions  = {'n': 'h', 'i': 'l', 'u': 'k', 'e': 'j', 'N': '0', 'I': '$', 'h': 'e'}
-let g:VM_maps['i']         = 'k'
-let g:VM_maps['I']         = 'K'
+let g:VM_leader                     = {'default': ',', 'visual': ',', 'buffer': ','}
+let g:VM_maps                       = {}
+let g:VM_custom_motions             = {'n': 'h', 'i': 'l', 'u': 'k', 'e': 'j', 'N': '0', 'I': '$', 'h': 'e'}
+let g:VM_maps['i']                  = 'k'
+let g:VM_maps['I']                  = 'K'
 let g:VM_maps['Find Under']         = '<C-k>'
 let g:VM_maps['Find Subword Under'] = '<C-k>'
-let g:VM_maps['Find Next']         = ''
-let g:VM_maps['Find Prev']         = ''
-let g:VM_maps['Remove Region'] = 'q'
-let g:VM_maps['Skip Region'] = '<c-n>'
-let g:VM_maps["Undo"]      = 'l'
-let g:VM_maps["Redo"]      = '<C-r>'
+let g:VM_maps['Find Next']          = ''
+let g:VM_maps['Find Prev']          = ''
+let g:VM_maps['Remove Region']      = 'q'
+let g:VM_maps['Skip Region']        = '<c-n>'
+let g:VM_maps["Undo"]               = 'l'
+let g:VM_maps["Redo"]               = '<C-r>'
+
 
 
 " ===
@@ -861,8 +1001,8 @@ let g:VM_maps["Redo"]      = '<C-r>'
 " ===#NO!
 noremap <LEADER>f :F  **/*<left><left><left><left><left>
 let g:far#mapping = {
-		\ "replace_undo" : ["l"],
-		\ }
+			\ "replace_undo" : ["l"],
+			\ }
 
 
 " ===
@@ -896,14 +1036,14 @@ let g:vista_default_executive = 'ctags'
 let g:vista_fzf_preview = ['right:50%']
 let g:vista#renderer#enable_icon = 1
 let g:vista#renderer#icons = {
-\   "function": "\uf794",
-\   "variable": "\uf71b",
-\  }
-function! NearestMethodOrFunction() abort
-	return get(b:, 'vista_nearest_method_or_function', '')
-endfunction
-set statusline+=%{NearestMethodOrFunction()}
-autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+			\   "function": "\uf794",
+			\   "variable": "\uf71b",
+			\  }
+"function! NearestMethodOrFunction() abort
+"	return get(b:, 'vista_nearest_method_or_function', '')
+"endfunction
+"set statusline+=%{NearestMethodOrFunction()}
+"autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 
 
 " ===
@@ -920,12 +1060,11 @@ inoremap <c-n> <nop>
 let g:UltiSnipsExpandTrigger="<c-e>"
 let g:UltiSnipsJumpForwardTrigger="<c-e>"
 let g:UltiSnipsJumpBackwardTrigger="<c-n>"
-let g:UltiSnipsSnippetDirectories = [$HOME.'/.config/nvim/Ultisnips/', $HOME.'/.config/nvim/plugged/vim-snippets/UltiSnips/']
-silent! au BufEnter,BufRead,BufNewFile * silent! unmap <c-r>
+let g:UltiSnipsSnippetDirectories = [$HOME.'/.config/nvim/Ultisnips/', $HOME.'/.config/nvim/plugged/vim-snippets/UltiSnips/']"silent! au BufEnter,BufRead,BufNewFile * silent! unmap <c-r>
 " Solve extreme insert-mode lag on macOS (by disabling autotrigger)
-augroup ultisnips_no_auto_expansion
-    au!
-    au VimEnter * au! UltiSnips_AutoTrigger
+augroup ultisnips_no_auto_expansin
+au!
+au VimEnter * au! UltiSnips_AutoTrigger
 augroup END
 
 
@@ -943,26 +1082,26 @@ let maplocalleader=' '
 
 " ===
 " === vim-calendar
-" ===#YES!        i->k  I->K
+" ===
 "noremap \c :Calendar -position=here<CR>
 noremap \\ :Calendar -view=clock -position=here<CR>
 let g:calendar_google_calendar = 1
 let g:calendar_google_task = 1
 augroup calendar-mappings
-	autocmd!
-	" diamond cursor
-	autocmd FileType calendar nmap <buffer> k <Plug>(calendar_up)
-	autocmd FileType calendar nmap <buffer> h <Plug>(calendar_left)
-	autocmd FileType calendar nmap <buffer> j <Plug>(calendar_down)
-	autocmd FileType calendar nmap <buffer> l <Plug>(calendar_right)
-	autocmd FileType calendar nmap <buffer> <c-k> <Plug>(calendar_move_up)
-	autocmd FileType calendar nmap <buffer> <c-h> <Plug>(calendar_move_left)
-	autocmd FileType calendar nmap <buffer> <c-j> <Plug>(calendar_move_down)
-	autocmd FileType calendar nmap <buffer> <c-l> <Plug>(calendar_move_right)
-	autocmd FileType calendar nmap <buffer> i <Plug>(calendar_start_insert)
-	autocmd FileType calendar nmap <buffer> I <Plug>(calendar_start_insert_head)
+	autocmd!	
+		" diamond cursor
+	autocmd FileType calendar nmap <buffer> u <Plug>(calendar_up)
+	autocmd FileType calendar nmap <buffer> n <Plug>(calendar_left)
+	autocmd FileType calendar nmap <buffer> e <Plug>(calendar_down)
+	autocmd FileType calendar nmap <buffer> i <Plug>(calendar_right)
+	autocmd FileType calendar nmap <buffer> <c-u> <Plug>(calendar_move_up)
+	autocmd FileType calendar nmap <buffer> <c-n> <Plug>(calendar_move_left)
+	autocmd FileType calendar nmap <buffer> <c-e> <Plug>(calendar_move_down)
+	autocmd FileType calendar nmap <buffer> <c-i> <Plug>(calendar_move_right)
+	autocmd FileType calendar nmap <buffer> k <Plug>(calendar_start_insert)
+	autocmd FileType calendar nmap <buffer> K <Plug>(calendar_start_insert_head)
 	" unmap <C-n>, <C-p> for other plugins
-	autocmd FileType calendar nunmap <buffer> <C-h>         #h->n
+	autocmd FileType calendar nunmap <buffer> <C-n>
 	autocmd FileType calendar nunmap <buffer> <C-p>
 augroup END
 
@@ -970,9 +1109,9 @@ augroup END
 " ===
 " === Anzu
 " ===#YES!
-set statusline=%{anzu#search_status()}
-nnoremap = n        
-nnoremap - N        
+"set statusline=%{anzu#search_status()}
+"nnoremap = n
+"nnoremap - N
 
 
 " ===
@@ -1011,6 +1150,9 @@ let g:go_doc_keywordprg_enabled = 0
 " === AutoFormat
 " ===
 nnoremap \f :Autoformat<CR>
+let g:formatdef_custom_js = '"js-beautify -t"'
+let g:formatters_javascript = ['custom_js']
+au BufWrite *.js :Autoformat
 
 
 " ===
@@ -1059,14 +1201,14 @@ endfunction
 
 " ===
 " === vim-easymotion
-" ===#NO!
+" ===
 let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_do_shade = 0
 let g:EasyMotion_smartcase = 1
-map ' <Plug>(easymotion-bd-f)
-nmap ' <Plug>(easymotion-bd-f)s
-"map E <Plug>(easymotion-j)     
-"map U <Plug>(easymotion-k)      
+" map ' <Plug>(easymotion-overwin-f2)
+" nmap ' <Plug>(easymotion-overwin-f2)
+"map E <Plug>(easymotion-j)
+"map U <Plug>(easymotion-k)
 "nmap f <Plug>(easymotion-overwin-f)
 "map \; <Plug>(easymotion-prefix)
 "nmap ' <Plug>(easymotion-overwin-f2)
@@ -1074,7 +1216,6 @@ nmap ' <Plug>(easymotion-bd-f)s
 "nmap 'l <Plug>(easymotion-overwin-line)
 "map  'w <Plug>(easymotion-bd-w)
 "nmap 'w <Plug>(easymotion-overwin-w)
-
 
 " ===
 " === goyo
@@ -1091,22 +1232,22 @@ let g:vim_jsx_pretty_colorful_config = 1
 " ===
 " === fastfold
 " ===#NO!
-nmap zuz <Plug>(FastFoldUpdate)
-let g:fastfold_savehook = 1
-let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
-let g:fastfold_fold_movement_commands = [']z', '[z', 'ze', 'zu']
-let g:markdown_folding = 1
-let g:tex_fold_enabled = 1
-let g:vimsyn_folding = 'af'
-let g:xml_syntax_folding = 1
-let g:javaScript_fold = 1
-let g:sh_fold_enabled= 7
-let g:ruby_fold = 1
-let g:perl_fold = 1
-let g:perl_fold_blocks = 1
-let g:r_syntax_folding = 1
-let g:rust_fold = 1
-let g:php_folding = 1
+"nmap zuz <Plug>(FastFoldUpdate)
+"let g:fastfold_savehook = 1
+"let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
+"let g:fastfold_fold_movement_commands = [']z', '[z', 'ze', 'zu']
+"let g:markdown_folding = 1
+"let g:tex_fold_enabled = 1
+"let g:vimsyn_folding = 'af'
+"let g:xml_syntax_folding = 1
+"let g:javaScript_fold = 1
+"let g:sh_fold_enabled= 7
+"let g:ruby_fold = 1
+"let g:perl_fold = 1
+"let g:perl_fold_blocks = 1
+"let g:r_syntax_folding = 1
+"let g:rust_fold = 1
+"let g:php_folding = 1
 
 
 " ===
@@ -1148,9 +1289,9 @@ noremap \p :XTabInfo<CR>
 "let g:session_command_aliases = 1
 "set sessionoptions-=buffers
 "set sessionoptions-=options
-"noremap sl :OpenSession<CR>    
+"noremap sl :OpenSession<CR>
 "noremap sS :SaveSession<CR>
-"noremap ss :SaveSession 
+"noremap ss :SaveSession
 "noremap sc :SaveSession<CR>:CloseSession<CR>:q<CR>
 "noremap so :OpenSession default<CR>
 "noremap sD :DeleteSession<CR>
@@ -1213,7 +1354,17 @@ let g:vmt_fence_closing_text = '/TOC'
 " ===#NO!
 let g:rnvimr_ex_enable = 1
 let g:rnvimr_pick_enable = 1
-nnoremap <silent> R :RnvimrSync<CR>:RnvimrToggle<CR><C-\><C-n>:RnvimrResize 0<CR>
+let g:rnvimr_draw_border = 0
+" let g:rnvimr_bw_enable = 1
+highlight link RnvimrNormal CursorLine
+nnoremap <silent> R :RnvimrToggle<CR><C-\><C-n>:RnvimrResize 0<CR>
+let g:rnvimr_action = {
+            \ '<C-t>': 'NvimEdit tabedit',
+            \ '<C-x>': 'NvimEdit split',
+            \ '<C-v>': 'NvimEdit vsplit',
+            \ 'gw': 'JumpNvimCwd',
+            \ 'yw': 'EmitRangerCwd'
+            \ }
 let g:rnvimr_layout = { 'relative': 'editor',
             \ 'width': &columns,
             \ 'height': &lines,
@@ -1241,7 +1392,7 @@ hi illuminatedWord cterm=undercurl gui=undercurl
 " === vim-rooter
 " ===#NO!
 let g:rooter_patterns = ['__vim_project_root', '.git/']
-
+let g:rooter_silent_chdir = 1
 
 " ===
 " === AsyncRun
@@ -1260,8 +1411,7 @@ let g:asyncrun_open = 6
 " ===#NO!
 let g:dart_style_guide = 2
 let g:dart_format_on_save = 1
-let g:dartfmt_options = " -l 100 --fix"
-
+let g:dartfmt_options = ["-l 100"]
 
 " ===
 " === tcomment_vim
@@ -1273,6 +1423,30 @@ vmap <LEADER>cn g>
 nmap <LEADER>cu g<c
 vmap <LEADER>cu g<
 
+" ===
+" === NrrwRgn
+" ===
+let g:nrrw_rgn_nomap_nr = 1
+let g:nrrw_rgn_nomap_Nr = 1
+noremap <c-y> :NR<CR>
+
+" ===
+" === any-jump
+" ===
+nnoremap j :AnyJump<CR>
+let g:any_jump_window_width_ratio  = 0.8
+let g:any_jump_window_height_ratio = 0.9
+
+" ===
+" === typescript-vim
+" ===
+let g:typescript_ignore_browserwords = 1
+
+" ===
+" === Agit
+" ===
+nnoremap <LEADER>gl :Agit<CR>
+let g:agit_no_default_mappings = 1
 
 " ===================== End of Plugin Settings =====================
 
