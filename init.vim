@@ -75,6 +75,7 @@ set enc=utf-8 "coding
 "
 "
 set number
+"set nrformats=
 set relativenumber
 set cursorline
 set noexpandtab
@@ -178,7 +179,7 @@ noremap K I
 nnoremap Y y$
 
 " Copy to system clipboard
-vnoremap Y "+y
+vnoremap y "+y
 
 " Indentation
 nnoremap < <<
@@ -1008,7 +1009,7 @@ let g:far#mapping = {
 " ===
 " === vim-calc
 " ===
-"noremap <LEADER>a :call Calc()<CR>
+noremap <LEADER>a :call Calc()<CR>
 " Testing
 "if !empty(glob('~/Github/vim-calc/vim-calc.vim'))
 "source ~/Github/vim-calc/vim-calc.vim
